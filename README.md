@@ -263,7 +263,7 @@ Intelligent-Voice-Interactive-Robots-with-Facial-Expressions/
     *   Download the SenseVoiceSmall model (e.g., `iic/SenseVoiceSmall`) and place it in an appropriate location. The `model_dir` in the `sensevoice.py` script points to this model.
     *   Ensure the `remote_code` path in `sensevoice.py` correctly points to `SenseVoice/model.py` (if using local model code).
 3.  **GPT-SoVITS Environment and Model**:
-    *   Install and configure according to the official GPT-SoVITS repository instructions.
+    *   Install and configure according to the `GPT-SoVITS/README.md` instructions.
     *   Place your trained GPT and SoVITS models in their required paths.
     *   In `work.bat`, modify `YOUR_GPT_SOVITS_MODEL_PATH` to your GPT-SoVITS project path.
 4.  **Python Dependencies (Main Environment)**:
@@ -419,6 +419,53 @@ The server sends commands to Arduino via serial to trigger these expressions and
 *   **LLM reply format error**:
     *   The `system_prompt` in `server.py` has strict requirements for LLM output format. If LLM fails to adhere strictly, JSON parsing will fail. Try adjusting the prompt or adding stronger post-processing logic.
 
+## TODO List
+
+*   **Enhanced Emotional Expression**:
+    *   Implement more nuanced facial expressions beyond the basic set.
+    *   Dynamically adjust expression intensity based on LLM emotion scores.
+    *   Add subtle idle animations (e.g., occasional blinks, slight head movements).
+*   **Intelligent Voice Control**:
+    *   Implement a voice command system (supporting smart home control, weather queries, etc.)
+    *   Develop IoT device integration interfaces (enabling voice control of lights, air conditioners, and other smart devices)
+    *   Integrate real-time information query capabilities (weather, news, schedule reminders, etc.)
+    *   Create a voice command shortcut library (supporting user-defined quick commands)
+*   **Improved Voice Interaction**:
+    *   Implement barge-in capability (allow user to interrupt the robot's speech).
+    *   Explore local ASR and TTS options to reduce latency and reliance on cloud services.
+    *   Add support for more languages in TTS if GPT-SoVITS allows.
+*   **Voice Perception Capabilities**:
+    *   Develop environmental sound recognition (e.g., doorbells, alarms, and other IoT device sounds)
+    *   Implement audio scene analysis-based environmental awareness
+    *   Add customizable voice wake-word functionality
+*   **Vision Capabilities**:
+    *   Integrate a camera for face detection/recognition.
+    *   Implement object recognition to allow interaction with the environment.
+    *   Use visual cues to understand user engagement or detect specific gestures.
+*   **Mobility**:
+    *   Add a mobile base to allow the robot to move.
+*   **User Customization**:
+    *   Allow users to easily define new voice commands or interaction flows.
+    *   Provide a simpler interface for customizing TTS voice or LLM personality.
+*   **System Robustness and Usability**:
+    *   Improve error handling and recovery mechanisms across all modules.
+    *   Develop a more user-friendly setup and configuration process.
+    *   Add more comprehensive logging for easier debugging.
+    *   Optimize power consumption, especially for battery-powered operation.
+*   **Advanced LLM Integration**:
+    *   Explore using LLMs for more complex task planning or reasoning.
+    *   Fine-tune an LLM specifically for this robot's persona and tasks.
+*   **Code and Documentation**:
+    *   Refactor code for better modularity and maintainability.
+    *   Add more detailed inline comments and expand documentation.
+    *   Create unit tests for server-side Python components.
+*   **Hardware Upgrades**:
+    *   Explore using more precise or quieter servos.
+    *   Investigate higher-quality microphone arrays for better sound capture.
+    *   Consider a more powerful main MCU if ESP32 limitations are reached.
+*   **Web Interface**:
+    *   Develop a web interface for configuration, status monitoring, and manual control.
+
 ## Contribution Guidelines
 
 Contributions to this project are welcome! Please follow these steps:
@@ -437,6 +484,7 @@ Contributions to this project are welcome! Please follow these steps:
 *   **Adafruit**: For providing driver libraries for PCA9685, NeoPixel, etc.
 *   **U8g2 Library Author**: For providing a powerful OLED display library.
 *   All related open-source projects and communities.
+
 
 ---
 
