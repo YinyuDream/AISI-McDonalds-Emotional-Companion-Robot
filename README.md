@@ -27,6 +27,7 @@ This project is an intelligent voice interactive robot based on ESP32, Arduino (
   - [`Server/config.json`](#serverconfigjson)
 - [Facial Expression Control](#facial-expression-control)
 - [Troubleshooting](#troubleshooting)
+- [TODO List](#TODO List)
 - [Contribution Guidelines](#contribution-guidelines)
 - [Acknowledgements](#acknowledgements)
 
