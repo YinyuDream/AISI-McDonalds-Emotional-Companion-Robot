@@ -185,9 +185,11 @@ Intelligent-Voice-Interactive-Robots-with-Facial-Expressions/
 │       └── ayaka.wav       # Example reference audio (or other)
 ├── SenseVoice/             # SenseVoice model related (e.g., model.py)
 |   ├── README.md           # SenseVoice usage instructions
-│   └── model.py            # SenseVoice model loading script (example path)
+├── GPT-SoVITS/             # GPT-SoVITS model related (e.g., go-api.bat)
+|   ├── README.md           # GPT-SoVITS usage instructions
+│   └── go-api.bat          # GPT-SoVITS model loading script (example path)
+├── servoControlDisplay.py  # For servo testing
 ├── work.bat                # Windows batch script to start server components
-├── GPT-SoVITS API Usage.md # GPT-SoVITS API usage instructions
 └── README.md               # This file
 ```
 

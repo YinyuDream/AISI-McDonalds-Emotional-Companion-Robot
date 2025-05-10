@@ -185,9 +185,11 @@ Intelligent-Voice-Interactive-Robots-with-Facial-Expressions/
 │       └── ayaka.wav       # 示例参考音频 (或其他)
 ├── SenseVoice/             # SenseVoice 模型相关 (如 model.py)
 |   ├── README.md           # SenseVoice 使用说明
-│   └── model.py            # SenseVoice 模型加载脚本 (示例路径)
+├── GPT-SoVITS/             # GPT-SoVITS 模型相关 (如 go-api.bat)
+|   ├── README.md           # GPT-SoVITS 使用说明
+│   └── go-api.bat          # GPT-SoVITS 模型加载脚本 (示例路径)
+├── servoControlDisplay.py  # 用于舵机测试
 ├── work.bat                # Windows批处理脚本，用于启动服务器组件
-├── GPT-SoVITS API Usage.md # GPT-SoVITS API 使用说明
 └── README.md               # 本文件
 ```
 
