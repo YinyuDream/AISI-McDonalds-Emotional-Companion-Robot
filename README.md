@@ -27,7 +27,7 @@ This project is an intelligent voice interactive robot based on ESP32, Arduino (
   - [`Server/config.json`](#serverconfigjson)
 - [Facial Expression Control](#facial-expression-control)
 - [Troubleshooting](#troubleshooting)
-- [TODO List](#TODO List)
+- [TODO](#TODO)
 - [Contribution Guidelines](#contribution-guidelines)
 - [Acknowledgements](#acknowledgements)
 
@@ -420,7 +420,7 @@ The server sends commands to Arduino via serial to trigger these expressions and
 *   **LLM reply format error**:
     *   The `system_prompt` in `server.py` has strict requirements for LLM output format. If LLM fails to adhere strictly, JSON parsing will fail. Try adjusting the prompt or adding stronger post-processing logic.
 
-## TODO List
+## TODO
 
 *   **Enhanced Emotional Expression**:
     *   Implement more nuanced facial expressions beyond the basic set.
