@@ -1,6 +1,8 @@
 ([简体中文](./README_zh.md)|English)
 # Intelligent Voice Interactive Robot with Facial Expressions
 
+![photo](photo.png)
+
 This project is an intelligent voice interactive robot based on ESP32, Arduino (or similar microcontroller), a Python server, and various AI services. It can communicate with users through voice and interact with facial expressions (controlled by servos) and an OLED display.
 
 **License:** [MIT License](LICENSE)
@@ -39,7 +41,7 @@ The robot captures the user's voice through a microphone and sends it to a backe
     *   Audio output using MAX98357A audio amplifier.
     *   On-board energy-based Voice Activity Detection (VAD).
 *   **Facial Expressions**:
-    *   Achieves various facial expressions (neutral, happy, sad, surprised) through 20 SG90 servos (controlled by two PCA9685 driver boards).
+    *   Achieves various facial expressions (neutral, happy, sad, surprised) through 20 SG90 servos (mounted on a 3D-printed skull and controlled by two PCA9685 driver boards) simulating eyebrows, eyes, and mouth.
     *   Supports blinking and mouth animations during speech.
 *   **AI Processing**:
     *   **Speech Recognition (ASR)**: Uses the SenseVoice model for multilingual speech recognition.
@@ -116,11 +118,15 @@ The robot captures the user's voice through a microphone and sends it to a backe
     *   Arduino Uno/Nano or similar microcontroller (can also be another ESP32)
     *   2 x PCA9685 16-channel PWM servo driver boards
     *   20 x SG90 servos (or similar model)
+    *   3D-printed skull structure (for servo mounting, design references available on open-source platforms like [Onshape](https://www.onshape.com/) or customizable)  
     *   External power supply (for servos, e.g., 5V 3A+)
     *   Connecting wires
 *   **Server**:
     *   A PC or server (Windows/Linux/macOS)
     *   NVIDIA GPU (recommended, for SenseVoice and GPT-SoVITS acceleration)
+*   **Skull structure**:
+    * Download it from the open source web site [Onshape](https://www.onshape.com/)
+
 *   **Other**:
     *   USB cables
     *   WiFi router
@@ -197,16 +203,22 @@ Intelligent-Voice-Interactive-Robots-with-Facial-Expressions/
 
 ### Hardware Connection
 
-1.  **ESP32 Module**:
-    *   Connect INMP441, MAX98357A, OLED, NeoPixel LED, and buttons according to the pin definitions in `Voice Interaction/src/main.cpp`.
-    *   Ensure I2S pins are correctly connected.
-2.  **Arduino Module**:
-    *   Connect the SDA, SCL pins of both PCA9685 boards to the Arduino's I2C pins (usually A4, A5).
-    *   Set different I2C addresses for the PCA9685 boards (0x40, 0x41).
-    *   Connect SG90 servos to the channels of the PCA9685 boards.
-    *   Provide a stable external power supply for the servos and PCA9685 boards.
-    *   Connect Arduino to the PC running the server via USB.
-3.  **Power Supply**: Ensure all modules have a stable and sufficient power supply, especially the servo section.
+1. **ESP32 Module**:
+   *   Connect INMP441, MAX98357A, OLED, NeoPixel LED, and buttons according to the pin definitions in `Voice Interaction/src/main.cpp`.
+   *   Ensure I2S pins are correctly connected.
+
+2. **Arduino Module**:
+
+   * Prepare the 3D-printed skull structure.
+   * Install SG90 servos into the designated positions on the 3D-printed skull.
+
+   *   Connect the SDA, SCL pins of both PCA9685 boards to the Arduino's I2C pins (usually A4, A5).
+   *   Set different I2C addresses for the PCA9685 boards (0x40, 0x41).
+   *   Connect SG90 servos to the channels of the PCA9685 boards.
+   *   Provide a stable external power supply for the servos and PCA9685 boards.
+   *   Connect Arduino to the PC running the server via USB.
+
+3. **Power Supply**: Ensure all modules have a stable and sufficient power supply, especially the servo section.
 
 ### ESP32 (Voice Interaction Module)
 

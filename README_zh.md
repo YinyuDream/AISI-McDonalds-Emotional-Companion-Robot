@@ -1,6 +1,8 @@
 「简体中文」|「[English](./README.md)」
 # 智能语音交互面部表情机器人
 
+![photo](photo.png)
+
 本项目是一个基于ESP32、Arduino（或类似微控制器）、Python服务器和多种AI服务的智能语音交互机器人，能够通过语音与用户交流，并配合面部表情（通过舵机控制）和OLED显示屏进行互动。
 
 **许可证:** [MIT License](LICENSE)
@@ -39,7 +41,7 @@
     *   使用MAX98357A音频放大器进行音频输出。
     *   板载能量法语音活动检测 (VAD)。
 *   **面部表情**:
-    *   通过20个SG90舵机（由两块PCA9685驱动板控制）实现多种面部表情（自然、开心、悲伤、惊讶）。
+    *   通过安装在3D打印头骨上的20个SG90舵机（由两块PCA9685驱动板控制）模拟眉毛、眼睛和嘴巴，实现多种面部表情（自然、开心、悲伤、惊讶）。
     *   支持眨眼和说话时的口型动画。
 *   **AI处理**:
     *   **语音识别 (ASR)**: 使用SenseVoice模型进行多语言语音识别。
@@ -116,6 +118,7 @@
     *   Arduino Uno/Nano 或类似的微控制器 (也可以是另一个ESP32)
     *   2 x PCA9685 16通道PWM舵机驱动板
     *   20 x SG90舵机 (或类似型号)
+    *   3D打印头骨结构 (用于安装舵机，设计可参考[Onshape](https://www.onshape.com/)等开源平台或自行设计)
     *   外部电源 (用于舵机，例如5V 3A+)
     *   连接线
 *   **服务器**:
@@ -201,6 +204,8 @@ Intelligent-Voice-Interactive-Robots-with-Facial-Expressions/
     *   按照 `Voice Interaction/src/main.cpp` 中的引脚定义连接INMP441, MAX98357A, OLED, NeoPixel LED和按钮。
     *   确保I2S引脚正确连接。
 2.  **Arduino模块**:
+    *   准备3D打印的头骨结构。
+    *   将SG90舵机安装到3D打印头骨的预定位置。
     *   将两块PCA9685的SDA, SCL引脚连接到Arduino的I2C引脚 (通常A4, A5)。
     *   为PCA9685板设置不同的I2C地址 (0x40, 0x41)。
     *   将SG90舵机连接到PCA9685板的通道上。
