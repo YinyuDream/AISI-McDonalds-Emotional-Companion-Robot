@@ -1,0 +1,27 @@
+{
+  "general": {
+    "history_maxlen": 10
+  },
+  "deepseek_client": {
+    "api_key": "YOUR_DEEPSEEK_API_KEY"
+  },
+  "sensevoice_server": {
+    "host_socket": "localhost",
+    "port_socket": 12345,
+    "host_server": "0.0.0.0",
+    "port_server": 12345
+  },
+  "esp32": {
+    "host": "YOUR_ESP32_IP_ADDRESS",
+    "port": 5000
+  },
+  "arduino": {
+    "port": "YOUR_ARDUINO_COM_PORT",
+    "baudrate": 9600
+  },
+  "tts_service": {
+    "ref_voice_name": "ayaka",
+    "ref_prompt_text": "啊，是你们。麻烦加两碗拉面。",
+    "ref_prompt_language": "中文"
+  }
+}
