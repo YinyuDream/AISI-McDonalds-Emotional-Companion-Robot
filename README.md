@@ -426,18 +426,18 @@ The server sends commands to Arduino via serial to trigger these expressions and
     *   Dynamically adjust expression intensity based on LLM emotion scores.
     *   Add subtle idle animations (e.g., occasional blinks, slight head movements).
 *   **Intelligent Voice Control**:
-    *   Implement a voice command system (supporting smart home control, weather queries, etc.)
-    *   Develop IoT device integration interfaces (enabling voice control of lights, air conditioners, and other smart devices)
-    *   Integrate real-time information query capabilities (weather, news, schedule reminders, etc.)
-    *   Create a voice command shortcut library (supporting user-defined quick commands)
+    *   Implement a voice command system (supporting expression control, weather queries, etc.).
+    *   Develop IoT device integration interfaces (enabling voice control of lights, air conditioners, and other smart devices).
+    *   Integrate real-time information query capabilities (weather, news, schedule reminders, etc.).
+    *   Create a voice command shortcut library (supporting user-defined quick commands).
 *   **Improved Voice Interaction**:
     *   Implement barge-in capability (allow user to interrupt the robot's speech).
     *   Explore local ASR and TTS options to reduce latency and reliance on cloud services.
     *   Add support for more languages in TTS if GPT-SoVITS allows.
 *   **Voice Perception Capabilities**:
-    *   Develop environmental sound recognition (e.g., doorbells, alarms, and other IoT device sounds)
-    *   Implement audio scene analysis-based environmental awareness
-    *   Add customizable voice wake-word functionality
+    *   Develop environmental sound recognition (e.g., doorbells, alarms, and other IoT device sounds).
+    *   Implement audio scene analysis-based environmental awareness.
+    *   Add customizable voice wake-word functionality.
 *   **Vision Capabilities**:
     *   Integrate a camera for face detection/recognition.
     *   Implement object recognition to allow interaction with the environment.
