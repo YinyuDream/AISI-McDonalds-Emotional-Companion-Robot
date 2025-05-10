@@ -124,9 +124,6 @@ The robot captures the user's voice through a microphone and sends it to a backe
 *   **Server**:
     *   A PC or server (Windows/Linux/macOS)
     *   NVIDIA GPU (recommended, for SenseVoice and GPT-SoVITS acceleration)
-*   **Skull structure**:
-    * Download it from the open source web site [Onshape](https://www.onshape.com/)
-
 *   **Other**:
     *   USB cables
     *   WiFi router
