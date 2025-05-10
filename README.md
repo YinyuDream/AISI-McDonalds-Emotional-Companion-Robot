@@ -39,7 +39,7 @@ The robot captures the user's voice through a microphone and sends it to a backe
     *   Audio output using MAX98357A audio amplifier.
     *   On-board energy-based Voice Activity Detection (VAD).
 *   **Facial Expressions**:
-    *   Achieves various facial expressions (neutral, happy, sad, surprised) through 21 SG90 servos (controlled by two PCA9685 driver boards).
+    *   Achieves various facial expressions (neutral, happy, sad, surprised) through 20 SG90 servos (controlled by two PCA9685 driver boards).
     *   Supports blinking and mouth animations during speech.
 *   **AI Processing**:
     *   **Speech Recognition (ASR)**: Uses the SenseVoice model for multilingual speech recognition.
@@ -63,7 +63,7 @@ The robot captures the user's voice through a microphone and sends it to a backe
 ```
 +---------------------+     WiFi (TCP/IP)     +-----------------------+     Serial     +---------------------+
 | ESP32               |<--------------------->| Python Server         |<--------------->| Arduino (Servo Ctrl)|
-| (Voice Interaction) |                       | (ASR, LLM, TTS)       |                | (PCA9685 x2, SG90x21)|
+| (Voice Interaction) |                       | (ASR, LLM, TTS)       |                | (PCA9685 x2, SG90x20)|
 | - INMP441 Mic       |                       | - SenseVoice (ASR)    |                +---------------------+
 | - MAX98357A Amp     |                       | - GPT-SoVITS (TTS)    |
 | - OLED Display      |                       | - DeepSeek API (LLM)  |
@@ -96,7 +96,7 @@ The robot captures the user's voice through a microphone and sends it to a backe
     *   Sends commands to **Arduino** via serial to control facial expressions based on the emotion returned by LLM.
 3.  **Arduino (Servo Control Module)**:
     *   Receives serial commands from the Python server.
-    *   Controls 21 SG90 servos via two PCA9685 driver boards to achieve preset facial expressions, blinking, and speaking animations.
+    *   Controls 20 SG90 servos via two PCA9685 driver boards to achieve preset facial expressions, blinking, and speaking animations.
 4.  **SenseVoice Server**:
     *   An independent Python process running the SenseVoice model, providing ASR service.
 5.  **GPT-SoVITS API Server**:
@@ -115,7 +115,7 @@ The robot captures the user's voice through a microphone and sends it to a backe
 *   **Servo Control Module (Arduino)**:
     *   Arduino Uno/Nano or similar microcontroller (can also be another ESP32)
     *   2 x PCA9685 16-channel PWM servo driver boards
-    *   21 x SG90 servos (or similar model)
+    *   20 x SG90 servos (or similar model)
     *   External power supply (for servos, e.g., 5V 3A+)
     *   Connecting wires
 *   **Server**:

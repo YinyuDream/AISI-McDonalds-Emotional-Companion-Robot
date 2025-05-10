@@ -39,7 +39,7 @@
     *   使用MAX98357A音频放大器进行音频输出。
     *   板载能量法语音活动检测 (VAD)。
 *   **面部表情**:
-    *   通过21个SG90舵机（由两块PCA9685驱动板控制）实现多种面部表情（自然、开心、悲伤、惊讶）。
+    *   通过20个SG90舵机（由两块PCA9685驱动板控制）实现多种面部表情（自然、开心、悲伤、惊讶）。
     *   支持眨眼和说话时的口型动画。
 *   **AI处理**:
     *   **语音识别 (ASR)**: 使用SenseVoice模型进行多语言语音识别。
@@ -63,7 +63,7 @@
 ```
 +---------------------+     WiFi (TCP/IP)     +-----------------------+     Serial     +---------------------+
 | ESP32               |<--------------------->| Python Server         |<--------------->| Arduino (Servo Ctrl)|
-| (Voice Interaction) |                       | (ASR, LLM, TTS)       |                | (PCA9685 x2, SG90x21)|
+| (Voice Interaction) |                       | (ASR, LLM, TTS)       |                | (PCA9685 x2, SG90x20)|
 | - INMP441 Mic       |                       | - SenseVoice (ASR)    |                +---------------------+
 | - MAX98357A Amp     |                       | - GPT-SoVITS (TTS)    |
 | - OLED Display      |                       | - DeepSeek API (LLM)  |
@@ -96,7 +96,7 @@
     *   根据LLM返回的情感，通过串口向**Arduino**发送指令以控制面部表情。
 3.  **Arduino (舵机控制模块)**:
     *   接收来自Python服务器的串口指令。
-    *   通过两块PCA9685驱动板控制21个SG90舵机，实现预设的面部表情、眨眼和说话动画。
+    *   通过两块PCA9685驱动板控制20个SG90舵机，实现预设的面部表情、眨眼和说话动画。
 4.  **SenseVoice Server**:
     *   一个独立的Python进程，运行SenseVoice模型，提供ASR服务。
 5.  **GPT-SoVITS API Server**:
@@ -115,7 +115,7 @@
 *   **舵机控制模块 (Arduino)**:
     *   Arduino Uno/Nano 或类似的微控制器 (也可以是另一个ESP32)
     *   2 x PCA9685 16通道PWM舵机驱动板
-    *   21 x SG90舵机 (或类似型号)
+    *   20 x SG90舵机 (或类似型号)
     *   外部电源 (用于舵机，例如5V 3A+)
     *   连接线
 *   **服务器**:
