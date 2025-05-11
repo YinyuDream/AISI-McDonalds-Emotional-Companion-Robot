@@ -1,67 +1,67 @@
-([简体中文](./README_zh.md)|English)
-# Intelligent Voice Interactive Robot with Facial Expressions
+「简体中文」|「[English](./README.md)」
+# 爱思麦当劳情感伴侣机器人
 
 ![photo](photo.png)
 
-This project is an intelligent voice interactive robot based on ESP32, Arduino (or similar microcontroller), a Python server, and various AI services. It can communicate with users through voice and interact with facial expressions (controlled by servos) and an OLED display.
+本项目是一个基于ESP32、Arduino（或类似微控制器）、Python服务器和多种AI服务的智能语音交互机器人，能够通过语音与用户交流，并配合面部表情（通过舵机控制）和OLED显示屏进行互动。
 
-**License:** [MIT License](LICENSE)
+**许可证:** [MIT License](LICENSE)
 
-## Table of Contents
+## 目录
 
-- [Project Overview](#project-overview)
-- [Features](#features)
-- [System Architecture](#system-architecture)
-- [Hardware Requirements](#hardware-requirements)
-- [Software Dependencies](#software-dependencies)
-- [Project Structure](#project-structure)
-- [Installation and Configuration](#installation-and-configuration)
-  - [Hardware Connection](#hardware-connection)
-  - [ESP32 (Voice Interaction Module)](#esp32-voice-interaction-module)
-  - [Arduino (Servo Control Module)](#arduino-servo-control-module)
-  - [Server-side](#server-side)
-- [Running the Project](#running-the-project)
-- [Usage](#usage)
-- [Configuration File Details](#configuration-file-details)
+- [项目概述](#项目概述)
+- [功能特性](#功能特性)
+- [系统架构](#系统架构)
+- [硬件要求](#硬件要求)
+- [软件依赖](#软件依赖)
+- [项目结构](#项目结构)
+- [安装与配置](#安装与配置)
+  - [硬件连接](#硬件连接)
+  - [ESP32 (语音交互模块)](#esp32-语音交互模块)
+  - [Arduino (舵机控制模块)](#arduino-舵机控制模块)
+  - [服务器端](#服务器端)
+- [运行项目](#运行项目)
+- [使用方法](#使用方法)
+- [配置文件详解](#配置文件详解)
   - [`Voice Interaction/src/config.h`](#voice-interactionsrcconfigh)
   - [`Server/config.json`](#serverconfigjson)
-- [Facial Expression Control](#facial-expression-control)
-- [Troubleshooting](#troubleshooting)
-- [TODO](#TODO)
-- [Contribution Guidelines](#contribution-guidelines)
-- [Acknowledgements](#acknowledgements)
+- [面部表情控制](#面部表情控制)
+- [故障排除](#故障排除)
+- [待办事项](#待办事项)
+- [贡献指南](#贡献指南)
+- [致谢](#致谢)
 
-## Project Overview
+## 项目概述
 
-The robot captures the user's voice through a microphone and sends it to a backend server for Automatic Speech Recognition (ASR), Natural Language Understanding (NLU/LLM), and Text-to-Speech (TTS). After processing, the server sends the generated voice reply and corresponding expression commands to the ESP32 for playback and to the Arduino for displaying expressions, respectively. The ESP32 also controls the OLED display and RGB LED status light.
+该机器人通过麦克风捕捉用户的语音，发送到后端服务器进行语音识别（ASR）、自然语言理解（NLU/LLM）和语音合成（TTS）。服务器处理后，将生成的语音回复和相应的表情指令分别发送给ESP32进行播放和Arduino进行表情展示。ESP32还负责控制OLED显示屏和RGB LED状态灯。
 
-## Features
+## 功能特性
 
-*   **Voice Interaction**:
-    *   Audio input via INMP441 microphone.
-    *   Audio output using MAX98357A audio amplifier.
-    *   On-board energy-based Voice Activity Detection (VAD).
-*   **Facial Expressions**:
-    *   Achieves various facial expressions (neutral, happy, sad, surprised) through 20 SG90 servos (mounted on a 3D-printed skull and controlled by two PCA9685 driver boards) simulating eyebrows, eyes, and mouth.
-    *   Supports blinking and mouth animations during speech.
-*   **AI Processing**:
-    *   **Speech Recognition (ASR)**: Uses the SenseVoice model for multilingual speech recognition.
-    *   **Natural Language Understanding and Generation (LLM)**: Uses DeepSeek API for dialogue management and response generation.
-    *   **Text-to-Speech (TTS)**: Uses GPT-SoVITS for speech synthesis.
-*   **User Interface and Status Indication**:
-    *   OLED display (SSD1306) shows system status and interaction text.
-    *   RGB NeoPixel LED indicates the robot's current status (e.g., listening, processing, playing).
-*   **Control and Communication**:
-    *   ESP32 communicates with the server via WiFi (TCP/IP).
-    *   The server communicates with Arduino via serial to control expressions.
-    *   FreeRTOS for multitasking on ESP32.
-    *   Button controls (volume adjustment, start/stop interaction).
-*   **Modular Design**:
-    *   Independent ESP32 voice interaction module.
-    *   Independent Arduino servo control module.
-    *   Python backend server integrating various AI services.
+*   **语音交互**:
+    *   通过INMP441麦克风进行音频输入。
+    *   使用MAX98357A音频放大器进行音频输出。
+    *   板载能量法语音活动检测 (VAD)。
+*   **面部表情**:
+    *   通过安装在3D打印头骨上的20个SG90舵机（由两块PCA9685驱动板控制）模拟眉毛、眼睛和嘴巴，实现多种面部表情（自然、开心、悲伤、惊讶）。
+    *   支持眨眼和说话时的口型动画。
+*   **AI处理**:
+    *   **语音识别 (ASR)**: 使用SenseVoice模型进行多语言语音识别。
+    *   **自然语言理解与生成 (LLM)**: 使用DeepSeek API进行对话管理和回复生成。
+    *   **语音合成 (TTS)**: 使用GPT-SoVITS进行语音合成。
+*   **用户界面与状态指示**:
+    *   OLED显示屏 (SSD1306) 显示系统状态和交互文本。
+    *   RGB NeoPixel LED指示机器人当前状态（如聆听、处理、播放等）。
+*   **控制与通信**:
+    *   ESP32通过WiFi与服务器进行TCP/IP通信。
+    *   服务器通过串口与Arduino进行通信以控制表情。
+    *   FreeRTOS用于ESP32上的多任务处理。
+    *   按键控制（音量调节、开始/停止交互）。
+*   **模块化设计**:
+    *   独立的ESP32语音交互模块。
+    *   独立的Arduino舵机控制模块。
+    *   Python后端服务器集成各项AI服务。
 
-## System Architecture
+## 系统架构
 
 ```
 +---------------------+     WiFi (TCP/IP)     +-----------------------+     Serial     +---------------------+
@@ -83,410 +83,416 @@ The robot captures the user's voice through a microphone and sends it to a backe
             +-----------------------+                             +-----------------------+
 ```
 
-1.  **ESP32 (Voice Interaction Module)**:
-    *   Captures user's voice, performs initial VAD processing.
-    *   Sends audio data to the Python server via WiFi.
-    *   Receives audio data returned by the server and plays it.
-    *   Receives text data returned by the server and displays it on the OLED.
-    *   Controls RGB LED based on server commands or internal status.
-    *   Interacts with the user via buttons.
+1.  **ESP32 (语音交互模块)**:
+    *   捕捉用户语音，进行初步VAD处理。
+    *   将音频数据通过WiFi发送到Python服务器。
+    *   接收服务器返回的音频数据并播放。
+    *   接收服务器返回的文本数据显示在OLED上。
+    *   根据服务器指令或内部状态控制RGB LED。
+    *   通过按键与用户交互。
 2.  **Python Server**:
-    *   Receives audio data sent by ESP32.
-    *   Calls **SenseVoice Server** for speech recognition.
-    *   Sends the recognized text to **DeepSeek API** to get a reply and emotion.
-    *   Sends the text generated by LLM and the specified language to **GPT-SoVITS API Server** for speech synthesis.
-    *   Sends the synthesized speech (PCM format) and reply text back to ESP32.
-    *   Sends commands to **Arduino** via serial to control facial expressions based on the emotion returned by LLM.
-3.  **Arduino (Servo Control Module)**:
-    *   Receives serial commands from the Python server.
-    *   Controls 20 SG90 servos via two PCA9685 driver boards to achieve preset facial expressions, blinking, and speaking animations.
+    *   接收ESP32发送的音频数据。
+    *   调用**SenseVoice服务器**进行语音识别。
+    *   将识别出的文本发送给**DeepSeek API**获取回复和情感。
+    *   将LLM生成的文本和指定语言发送给**GPT-SoVITS API服务器**进行语音合成。
+    *   将合成的语音（PCM格式）和回复文本发送回ESP32。
+    *   根据LLM返回的情感，通过串口向**Arduino**发送指令以控制面部表情。
+3.  **Arduino (舵机控制模块)**:
+    *   接收来自Python服务器的串口指令。
+    *   通过两块PCA9685驱动板控制20个SG90舵机，实现预设的面部表情、眨眼和说话动画。
 4.  **SenseVoice Server**:
-    *   An independent Python process running the SenseVoice model, providing ASR service.
+    *   一个独立的Python进程，运行SenseVoice模型，提供ASR服务。
 5.  **GPT-SoVITS API Server**:
-    *   An independent process (started via `go-api.bat`), providing TTS service.
+    *   一个独立的进程（通过`go-api.bat`启动），提供TTS服务。
 
-## Hardware Requirements
+## 硬件要求
 
-*   **Voice Interaction Module (ESP32)**:
-    *   ESP32 development board (e.g., ESP32-WROOM-32)
-    *   INMP441 I2S microphone module
-    *   MAX98357A I2S audio amplifier module + Speaker
-    *   OLED display (SSD1306, 128x32, I2C)
-    *   NeoPixel RGB LED (e.g., WS2812B)
-    *   3 momentary buttons (for volume up, volume down, start/stop)
-    *   Connecting wires, breadboard, resistors, etc.
-*   **Servo Control Module (Arduino)**:
-    *   Arduino Uno/Nano or similar microcontroller (can also be another ESP32)
-    *   2 x PCA9685 16-channel PWM servo driver boards
-    *   20 x SG90 servos (or similar model)
-    *   3D-printed skull structure (for servo mounting, design references available on open-source platforms like [Onshape](https://www.onshape.com/) or customizable)  
-    *   External power supply (for servos, e.g., 5V 3A+)
-    *   Connecting wires
-*   **Server**:
-    *   A PC or server (Windows/Linux/macOS)
-    *   NVIDIA GPU (recommended, for SenseVoice and GPT-SoVITS acceleration)
-*   **Other**:
-    *   USB cables
-    *   WiFi router
+*   **语音交互模块 (ESP32)**:
+    *   ESP32开发板 (例如 ESP32-WROOM-32)
+    *   INMP441 I2S麦克风模块
+    *   MAX98357A I2S音频放大器模块 + 扬声器
+    *   OLED显示屏 (SSD1306, 128x32, I2C)
+    *   NeoPixel RGB LED (例如 WS2812B)
+    *   3个瞬时按钮 (用于音量加、音量减、开始/停止)
+    *   连接线、面包板、电阻等
+*   **舵机控制模块 (Arduino)**:
+    *   Arduino Uno/Nano 或类似的微控制器 (也可以是另一个ESP32)
+    *   2 x PCA9685 16通道PWM舵机驱动板
+    *   20 x SG90舵机 (或类似型号)
+    *   3D打印头骨结构 (用于安装舵机，设计可参考[Onshape](https://www.onshape.com/)等开源平台或自行设计)
+    *   外部电源 (用于舵机，例如5V 3A+)
+    *   连接线
+*   **服务器**:
+    *   一台PC或服务器 (Windows/Linux/macOS)
+    *   NVIDIA GPU (推荐，用于SenseVoice和GPT-SoVITS加速)
+*   **其他**:
+    *   USB线缆
+    *   WiFi路由器
 
-## Software Dependencies
+## 软件依赖
 
-*   **ESP32 (Voice Interaction Module)**:
-    *   Arduino IDE or PlatformIO
+*   **ESP32 (语音交互模块)**:
+    *   Arduino IDE 或 PlatformIO
     *   ESP32 Board Support Package
-    *   Arduino libraries:
+    *   Arduino库:
         *   `WiFi.h`
         *   `driver/i2s.h` (ESP-IDF component)
         *   `Adafruit_NeoPixel.h`
         *   `U8g2lib.h`
-        *   FreeRTOS (usually provided with ESP32 core)
-*   **Arduino (Servo Control Module)**:
-    *   Arduino IDE or PlatformIO
-    *   Arduino libraries:
+        *   FreeRTOS (通常随ESP32核心提供)
+*   **Arduino (舵机控制模块)**:
+    *   Arduino IDE 或 PlatformIO
+    *   Arduino库:
         *   `Wire.h`
         *   `Adafruit_PWMServoDriver.h`
-*   **Server-side (Python)**:
+*   **服务器端 (Python)**:
     *   Python 3.8+
-    *   Conda (recommended, for managing SenseVoice environment)
+    *   Conda (推荐，用于管理SenseVoice环境)
     *   **SenseVoice**:
-        *   Install dependencies according to `SenseVoice Instruction.md` (usually in a conda environment).
-        *   SenseVoiceSmall model (download from ModelScope or Hugging Face).
+        *   按照 `SenseVoice Instruction.md` 安装依赖 (通常在conda环境中)。
+        *   SenseVoiceSmall模型 (从ModelScope或Hugging Face下载)。
     *   **GPT-SoVITS**:
-        *   Install and configure according to its official repository instructions.
-        *   Trained GPT and SoVITS models.
-        *   `go-api.bat` dependencies (usually Go environment).
-    *   **Python Dependencies (recommended to use `requirements.txt`)**:
+        *   按照其官方仓库说明安装和配置。
+        *   训练好的GPT和SoVITS模型。
+        *   `go-api.bat` 依赖 (通常是Go环境)。
+    *   **Python依赖 (建议使用`requirements.txt`)**:
         *   `numpy`
         *   `soundfile`
-        *   `openai` (for DeepSeek API)
+        *   `openai` (用于DeepSeek API)
         *   `requests`
         *   `pyserial`
-        *   `funasr` (SenseVoice dependency)
-        *   `torch` (SenseVoice and possible GPT-SoVITS dependency)
+        *   `funasr` (SenseVoice的依赖)
+        *   `torch` (SenseVoice和可能的GPT-SoVITS依赖)
     *   **DeepSeek API**:
-        *   Requires a valid API key.
+        *   需要一个有效的API密钥。
     *   **ffmpeg**:
-        *   Needs to be installed and added to the system PATH (for audio format conversion).
+        *   需要安装并添加到系统PATH中 (用于音频格式转换)。
 
-## Project Structure
+## 项目结构
 
 ```
 Intelligent-Voice-Interactive-Robots-with-Facial-Expressions/
-├── Voice Interaction/      # ESP32 Voice Interaction Module Code
+├── Voice Interaction/      # ESP32 语音交互模块代码
 │   └── src/
 │       ├── main.cpp
-│       └── config.h        # ESP32 WiFi and Server Configuration
-├── Servo Control/          # Arduino Servo Control Module Code
+│       └── config.h        # ESP32 WiFi和服务器配置
+├── Servo Control/          # Arduino 舵机控制模块代码
 │   └── src/
 │       └── main.cpp
-├── Server/                 # Python Backend Server Code
-│   ├── server.py           # Main server logic (LLM, TTS, Arduino communication)
-│   ├── sensevoice.py       # SenseVoice ASR service script
-│   └── config.json         # Server configuration (API keys, ports, etc.)
-├── data/                   # Data files
-│   ├── voice.wav           # Temporary storage for recorded audio
-│   └── ref/                # TTS reference audio folder
-│       └── ayaka.wav       # Example reference audio (or other)
-├── SenseVoice/             # SenseVoice model related (e.g., model.py)
-|   ├── README.md           # SenseVoice usage instructions
-├── GPT-SoVITS/             # GPT-SoVITS model related (e.g., go-api.bat)
-|   ├── README.md           # GPT-SoVITS usage instructions
-│   └── go-api.bat          # GPT-SoVITS model loading script (example path)
-├── servoControlDisplay.py  # For servo testing
-├── work.bat                # Windows batch script to start server components
-└── README.md               # This file
+├── Server/                 # Python 后端服务器代码
+│   ├── server.py           # 主服务器逻辑 (LLM, TTS, Arduino通信)
+│   ├── sensevoice.py       # SenseVoice ASR 服务脚本
+│   └── config.json         # 服务器配置 (API密钥, 端口等)
+├── data/                   # 数据文件
+│   ├── voice.wav           # 临时存储录制的音频
+│   └── ref/                # TTS参考音频文件夹
+│       └── ayaka.wav       # 示例参考音频 (或其他)
+├── SenseVoice/             # SenseVoice 模型相关 (如 model.py)
+|   ├── README.md           # SenseVoice 使用说明
+├── GPT-SoVITS/             # GPT-SoVITS 模型相关 (如 go-api.bat)
+|   ├── README.md           # GPT-SoVITS 使用说明
+│   └── go-api.bat          # GPT-SoVITS 模型加载脚本 (示例路径)
+├── servoControlDisplay.py  # 用于舵机测试
+├── work.bat                # Windows批处理脚本，用于启动服务器组件
+└── README.md               # 本文件
 ```
 
-## Installation and Configuration
+## 安装与配置
 
-### Hardware Connection
+### 硬件连接
 
-1. **ESP32 Module**:
-   *   Connect INMP441, MAX98357A, OLED, NeoPixel LED, and buttons according to the pin definitions in `Voice Interaction/src/main.cpp`.
-   *   Ensure I2S pins are correctly connected.
+1.  **ESP32模块**:
+    *   按照 `Voice Interaction/src/main.cpp` 中的引脚定义连接INMP441, MAX98357A, OLED, NeoPixel LED和按钮。
+    *   确保I2S引脚正确连接。
+2.  **Arduino模块**:
+    *   准备3D打印的头骨结构。
+    *   将SG90舵机安装到3D打印头骨的预定位置。
+    *   将两块PCA9685的SDA, SCL引脚连接到Arduino的I2C引脚 (通常A4, A5)。
+    *   为PCA9685板设置不同的I2C地址 (0x40, 0x41)。
+    *   将SG90舵机连接到PCA9685板的通道上。
+    *   为舵机和PCA9685板提供稳定的外部电源。
+    *   通过USB将Arduino连接到运行服务器的PC。
+3.  **电源**: 确保所有模块都有稳定和足够的电源供应，特别是舵机部分。
 
-2. **Arduino Module**:
+### ESP32 (语音交互模块)
 
-   * Prepare the 3D-printed skull structure.
-   * Install SG90 servos into the designated positions on the 3D-printed skull.
+1.  **IDE设置**:
+    *   安装Arduino IDE或PlatformIO。
+    *   在Arduino IDE中，通过Board Manager安装ESP32板支持。
+    *   通过Library Manager安装 `Adafruit NeoPixel` 和 `U8g2` 库。
+2.  **配置**:
+    *   打开 `Voice Interaction/src/config.h`。
+    *   修改 `WIFI_SSID` 和 `WIFI_PASSWORD` 为您的WiFi凭据。
+    *   修改 `SERVER_HOST` 为运行Python服务器的PC的IP地址。`SERVER_PORT` 默认为5000，与 `Server/config.json` 中的 `esp32.port` 对应。
+    *   根据需要调整VAD参数。
+3.  **上传代码**:
+    *   选择正确的ESP32板型号和端口。
+    *   编译并上传 `Voice Interaction/src/main.cpp` 到ESP32。
 
-   *   Connect the SDA, SCL pins of both PCA9685 boards to the Arduino's I2C pins (usually A4, A5).
-   *   Set different I2C addresses for the PCA9685 boards (0x40, 0x41).
-   *   Connect SG90 servos to the channels of the PCA9685 boards.
-   *   Provide a stable external power supply for the servos and PCA9685 boards.
-   *   Connect Arduino to the PC running the server via USB.
+### Arduino (舵机控制模块)
 
-3. **Power Supply**: Ensure all modules have a stable and sufficient power supply, especially the servo section.
+1.  **IDE设置**:
+    *   安装Arduino IDE或PlatformIO。
+    *   通过Library Manager安装 `Adafruit PWM Servo Driver Library`。
+2.  **上传代码**:
+    *   选择正确的Arduino板型号和端口。
+    *   编译并上传 `Servo Control/src/main.cpp` 到Arduino。
 
-### ESP32 (Voice Interaction Module)
+### 服务器端
 
-1.  **IDE Setup**:
-    *   Install Arduino IDE or PlatformIO.
-    *   In Arduino IDE, install ESP32 board support via Board Manager.
-    *   Install `Adafruit NeoPixel` and `U8g2` libraries via Library Manager.
-2.  **Configuration**:
-    *   Open `Voice Interaction/src/config.h`.
-    *   Modify `WIFI_SSID` and `WIFI_PASSWORD` with your WiFi credentials.
-    *   Modify `SERVER_HOST` to the IP address of the PC running the Python server. `SERVER_PORT` defaults to 5000, corresponding to `esp32.port` in `Server/config.json`.
-    *   Adjust VAD parameters as needed.
-3.  **Upload Code**:
-    *   Select the correct ESP32 board model and port.
-    *   Compile and upload `Voice Interaction/src/main.cpp` to ESP32.
-
-### Arduino (Servo Control Module)
-
-1.  **IDE Setup**:
-    *   Install Arduino IDE or PlatformIO.
-    *   Install `Adafruit PWM Servo Driver Library` via Library Manager.
-2.  **Upload Code**:
-    *   Select the correct Arduino board model and port.
-    *   Compile and upload `Servo Control/src/main.cpp` to Arduino.
-
-### Server-side
-
-1.  **Clone Repository**:
+1.  **克隆仓库**:
     ```bash
     git clone <your-repository-url>
     cd Intelligent-Voice-Interactive-Robots-with-Facial-Expressions
     ```
-2.  **SenseVoice Environment and Model**:
-    *   Create a conda environment:
+2.  **SenseVoice环境与模型**:
+    *   创建一个conda环境:
         ```bash
-        conda create -n sensevoice python=3.8  # or higher
+        conda create -n sensevoice python=3.8  # 或更高版本
         conda activate sensevoice
         ```
-    *   Install SenseVoice and its dependencies according to `SenseVoice/README.md`. This usually includes `funasr` and `torch`.
+    *   根据 `SenseVoice/README.md` 安装SenseVoice及其依赖。通常包括 `funasr` 和 `torch`。
         ```bash
         pip install funasr -i https://pypi.tuna.tsinghua.edu.cn/simple
-        pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118 # Choose according to your CUDA version
-        # Other potentially required dependencies
+        pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118 # 根据你的CUDA版本选择
+        # 其他可能需要的依赖
         ```
-    *   Download the SenseVoiceSmall model (e.g., `iic/SenseVoiceSmall`) and place it in an appropriate location. The `model_dir` in the `sensevoice.py` script points to this model.
-    *   Ensure the `remote_code` path in `sensevoice.py` correctly points to `SenseVoice/model.py` (if using local model code).
-3.  **GPT-SoVITS Environment and Model**:
-    *   Install and configure according to the `GPT-SoVITS/README.md` instructions.
-    *   Place your trained GPT and SoVITS models in their required paths.
-    *   In `work.bat`, modify `YOUR_GPT_SOVITS_MODEL_PATH` to your GPT-SoVITS project path.
-4.  **Python Dependencies (Main Environment)**:
-    *   (Optional) It is recommended to also create a virtual environment for the main server logic.
-    *   Install necessary Python packages:
+    *   下载SenseVoiceSmall模型 (例如 `iic/SenseVoiceSmall`) 并放置到合适的位置。`sensevoice.py` 脚本中的 `model_dir` 指向此模型。
+    *   确保 `sensevoice.py` 中的 `remote_code` 路径正确指向 `SenseVoice/model.py` (如果使用本地模型代码)。
+3.  **GPT-SoVITS环境与模型**:
+    *   按照 `GPT-SoVITS/README.md` 的说明安装和配置。
+    *   将训练好的GPT和SoVITS模型放置到其要求的路径。
+    *   在 `work.bat` 中，修改 `YOUR_GPT_SOVITS_MODEL_PATH` 为您的GPT-SoVITS项目路径。
+4.  **Python依赖 (主环境)**:
+    *   (可选) 建议为服务器主逻辑也创建一个虚拟环境。
+    *   安装必要的Python包:
         ```bash
         pip install numpy soundfile openai requests pyserial
         ```
 5.  **ffmpeg**:
-    *   Download ffmpeg and add its executable path to the system environment variable `PATH`.
-6.  **Configure `Server/config.json`**:
-    *   `deepseek_client.api_key`: Fill in your DeepSeek API key.
-    *   `sensevoice_server`: Usually keep the default (`localhost`, `12345`), ensure it matches the binding address in `sensevoice.py`.
-    *   `esp32.host`: Fill in the IP address the server listens on for ESP32 connections (usually the server's local IP address, `0.0.0.0` means listen on all interfaces). `esp32.port` must match `SERVER_PORT` in ESP32's `config.h`.
-    *   `arduino.port`: Fill in the COM port Arduino is connected to on the PC (e.g., `COM3` on Windows, `/dev/ttyUSB0` on Linux).
-    *   `arduino.baudrate`: Keep `9600` (consistent with Arduino code).
-    *   `tts_service`: Configure default reference voice, prompt text, and language for GPT-SoVITS. Ensure the `.wav` file corresponding to `ref_voice_name` exists in the `data/ref/` directory.
+    *   下载ffmpeg并将其可执行文件路径添加到系统环境变量 `PATH` 中。
+6.  **配置 `Server/config.json`**:
+    *   `deepseek_client.api_key`: 填入您的DeepSeek API密钥。
+    *   `sensevoice_server`: 通常保持默认 (`localhost`, `12345`)，确保与 `sensevoice.py` 中的绑定地址一致。
+    *   `esp32.host`: 填入ESP32连接时，服务器监听的IP地址（通常是服务器的本地IP地址，`0.0.0.0`表示监听所有接口）。`esp32.port` 必须与ESP32 `config.h` 中的 `SERVER_PORT` 一致。
+    *   `arduino.port`: 填入Arduino连接到PC的COM口 (例如 `COM3` on Windows, `/dev/ttyUSB0` on Linux)。
+    *   `arduino.baudrate`: 保持 `9600` (与Arduino代码一致)。
+    *   `tts_service`: 配置GPT-SoVITS的默认参考语音、提示文本和语言。确保 `ref_voice_name` 对应的 `.wav` 文件存在于 `data/ref/` 目录下。
 
-## Running the Project
+## 运行项目
 
-1.  **Start GPT-SoVITS API Service**:
-    *   Open a new command line window.
-    *   Navigate to your GPT-SoVITS model path (i.e., `YOUR_GPT_SOVITS_MODEL_PATH` in `work.bat`).
-    *   Run `go-api.bat` (or other startup script).
-    *   Ensure the API service starts successfully at `http://127.0.0.1:9880` (or your configured address).
-2.  **Start SenseVoice ASR Service**:
-    *   Open a new command line window.
-    *   Activate SenseVoice's conda environment: `conda activate sensevoice`
-    *   Navigate to the `Server/` directory.
-    *   Run `python sensevoice.py`.
-    *   Ensure the service starts successfully on the `sensevoice_server.host_server` and `port_server` configured in `config.json` (default `0.0.0.0:12345`) and displays "Waiting for connection...".
-3.  **Start Main Server**:
-    *   Open a new command line window.
-    *   (Activate virtual environment if used)
-    *   Navigate to the `Server/` directory.
-    *   Run `python server.py`.
-    *   The server will attempt to connect to the SenseVoice service and wait for ESP32 and Arduino connections.
-4.  **Using `work.bat` (Windows)**:
-    *   Before running `work.bat`, ensure `YOUR_GPT_SOVITS_MODEL_PATH` is correctly configured.
-    *   Double-click `work.bat` to attempt to start the above three services in order. Each service will run in its own command prompt window.
-5.  **Start Hardware**:
-    *   Power on the ESP32 and Arduino modules.
-    *   ESP32 will attempt to connect to WiFi and the server. The OLED screen and serial monitor will display the connection status.
-    *   The console of the main server `server.py` will display the connection status of ESP32 and Arduino.
+1.  **启动GPT-SoVITS API服务**:
+    *   打开一个新的命令行窗口。
+    *   导航到您的GPT-SoVITS模型路径 (即 `work.bat` 中的 `YOUR_GPT_SOVITS_MODEL_PATH`)。
+    *   运行 `go-api.bat` (或其他启动脚本)。
+    *   确保API服务在 `http://127.0.0.1:9880` (或您配置的地址) 成功启动。
+2.  **启动SenseVoice ASR服务**:
+    *   打开一个新的命令行窗口。
+    *   激活SenseVoice的conda环境: `conda activate sensevoice`
+    *   导航到 `Server/` 目录。
+    *   运行 `python sensevoice.py`。
+    *   确保服务在 `config.json` 中配置的 `sensevoice_server.host_server` 和 `port_server` (默认 `0.0.0.0:12345`) 成功启动并显示 "Waiting for connection..."。
+3.  **启动主服务器**:
+    *   打开一个新的命令行窗口。
+    *   (如果使用了虚拟环境，请激活它)
+    *   导航到 `Server/` 目录。
+    *   运行 `python server.py`。
+    *   服务器将尝试连接SenseVoice服务，并等待ESP32和Arduino的连接。
+4.  **使用 `work.bat` (Windows)**:
+    *   在运行 `work.bat` 之前，确保已正确配置 `YOUR_GPT_SOVITS_MODEL_PATH`。
+    *   双击 `work.bat` 将尝试按顺序启动上述三个服务。每个服务将在其自己的命令提示符窗口中运行。
+5.  **启动硬件**:
+    *   给ESP32和Arduino模块上电。
+    *   ESP32将尝试连接WiFi和服务器。OLED屏幕和串口监视器会显示连接状态。
+    *   主服务器 `server.py` 的控制台会显示ESP32和Arduino的连接状态。
 
-## Usage
+## 使用方法
 
-1.  Wait for all services and hardware modules to start and connect successfully.
-2.  The OLED screen on ESP32 will display initial information, and the RGB LED may show a standby color (e.g., orange).
-3.  Press the "Start" button on ESP32.
-4.  The LED turns red (ready to record).
-5.  When you start speaking, if VAD detects speech:
-    *   The LED turns green (listening/recording).
-    *   OLED displays "Listening to your voice".
-    *   ESP32 streams audio to the server.
-6.  After you finish speaking, ESP32 will send a stop signal.
-7.  The server processes the audio (ASR -> LLM -> TTS).
-    *   OLED displays "Processing..." or similar processing information.
-    *   LED blinks blue (waiting for server response).
-    *   Arduino will adjust facial expression based on the emotion recommended by LLM.
-8.  The server sends the synthesized voice and text reply back to ESP32.
-9.  ESP32 plays the voice reply.
-    *   OLED displays the reply text (may scroll).
-    *   LED turns purple (playing).
-    *   Arduino will perform speaking animation.
-10. After playback is complete, the LED turns red again, ready for the next interaction, or returns to standby state after a timeout.
-11. Volume up/down buttons can be used to adjust the playback volume on ESP32.
-12. Pressing the "Start" button again can stop the current session midway or wake up from standby.
+1.  等待所有服务和硬件模块成功启动并连接。
+2.  ESP32上的OLED屏幕会显示初始信息，RGB LED可能显示待机颜色（例如橙色）。
+3.  按下ESP32上的“开始”按钮。
+4.  LED变为红色（准备录音）。
+5.  当您开始说话时，如果VAD检测到语音：
+    *   LED变为绿色（正在聆听/录音）。
+    *   OLED显示“正在聆听您的声音”。
+    *   ESP32将音频流式传输到服务器。
+6.  说完话后，ESP32将发送停止信号。
+7.  服务器处理音频（ASR -> LLM -> TTS）。
+    *   OLED显示“少女祈祷中...”或类似的处理中信息。
+    *   LED变为蓝色闪烁（等待服务器响应）。
+    *   Arduino会根据LLM推荐的情感调整面部表情。
+8.  服务器将合成的语音和文本回复发送回ESP32。
+9.  ESP32播放语音回复。
+    *   OLED显示回复文本（可能滚动）。
+    *   LED变为紫色（正在播放）。
+    *   Arduino会执行说话动画。
+10. 播放完毕后，LED变回红色，准备下一次交互，或在超时后返回待机状态。
+11. 可以使用音量加/减按钮调节ESP32播放的音量。
+12. 再次按下“开始”按钮可以中途停止当前会话或从待机状态唤醒。
 
-## Configuration File Details
+## 配置文件详解
 
 ### `Voice Interaction/src/config.h`
 
-*   `WIFI_SSID`: Your WiFi network name.
-*   `WIFI_PASSWORD`: Your WiFi password.
-*   `SERVER_HOST`: IP address of the PC running the Python main server.
-*   `SERVER_PORT`: Port number on which the Python main server listens for ESP32 connections (should match `esp32.port` in `Server/config.json`).
-*   `MAX_VAD_INTERVAL`: Maximum silence detection interval (ms).
-*   `MAX_ACTIVATE_INTERVAL`: Maximum duration for a single voice activation (ms).
-*   `MAX_REST_LIMIT`: Maximum waiting time before entering sleep mode without voice activation (ms).
-*   `VAD_ENERGY_THRESHOLD`: VAD energy threshold.
+*   `WIFI_SSID`: 您的WiFi网络名称。
+*   `WIFI_PASSWORD`: 您的WiFi密码。
+*   `SERVER_HOST`: 运行Python主服务器的PC的IP地址。
+*   `SERVER_PORT`: Python主服务器监听ESP32连接的端口号 (应与 `Server/config.json` 中的 `esp32.port` 匹配)。
+*   `MAX_VAD_INTERVAL`: 静音检测最大间隔 (ms)。
+*   `MAX_ACTIVATE_INTERVAL`: 单次语音激活最大持续时间 (ms)。
+*   `MAX_REST_LIMIT`: 无语音激活进入休眠的最大等待时间 (ms)。
+*   `VAD_ENERGY_THRESHOLD`: VAD能量阈值。
 
 ### `Server/config.json`
 
-*   `general.history_maxlen`: Maximum number of turns in LLM conversation history.
-*   `deepseek_client.api_key`: Your DeepSeek API key.
+*   `general.history_maxlen`: LLM对话历史的最大轮数。
+*   `deepseek_client.api_key`: 您的DeepSeek API密钥。
 *   `sensevoice_server`:
-    *   `host_socket`: Hostname used by `server.py` to connect to the `sensevoice.py` service (usually `localhost`).
-    *   `port_socket`: Port number used by `server.py` to connect to the `sensevoice.py` service.
-    *   `host_server`: Host address `sensevoice.py` service binds to (`0.0.0.0` to listen on all interfaces).
-    *   `port_server`: Port number `sensevoice.py` service binds to.
+    *   `host_socket`: `server.py` 连接 `sensevoice.py` 服务时使用的主机名 (通常是 `localhost`)。
+    *   `port_socket`: `server.py` 连接 `sensevoice.py` 服务时使用的端口号。
+    *   `host_server`: `sensevoice.py` 服务绑定的主机地址 (`0.0.0.0` 监听所有接口)。
+    *   `port_server`: `sensevoice.py` 服务绑定的端口号。
 *   `esp32`:
-    *   `host`: Host address `server.py` listens on for ESP32 connections (`0.0.0.0` to listen on all interfaces).
-    *   `port`: Port number `server.py` listens on for ESP32 connections.
+    *   `host`: `server.py` 监听ESP32连接的主机地址 (`0.0.0.0` 监听所有接口)。
+    *   `port`: `server.py` 监听ESP32连接的端口号。
 *   `arduino`:
-    *   `port`: Serial port Arduino is connected to (e.g., "COM3", "/dev/ttyUSB0").
-    *   `baudrate`: Serial baud rate (should match Arduino code, default 9600).
-*   `tts_service`: GPT-SoVITS default parameters
-    *   `ref_voice_name`: Filename of the reference voice (without extension, e.g., "ayaka"), the corresponding `.wav` file should be in the `data/ref/` directory.
-    *   `ref_prompt_text`: Prompt text for the reference voice.
-    *   `ref_prompt_language`: Language of the reference voice prompt text.
+    *   `port`: Arduino连接的串口号 (例如 "COM3", "/dev/ttyUSB0")。
+    *   `baudrate`: 串口波特率 (应与Arduino代码一致, 默认9600)。
+*   `tts_service`: GPT-SoVITS默认参数
+    *   `ref_voice_name`: 参考音色的文件名 (不含扩展名, 例如 "ayaka")，对应的 `.wav` 文件应在 `data/ref/` 目录下。
+    *   `ref_prompt_text`: 参考音色的提示文本。
+    *   `ref_prompt_language`: 参考音色提示文本的语言。
 
-## Facial Expression Control
+## 面部表情控制
 
-Servo control code is located in `Servo Control/src/main.cpp`. It defines the following expressions and actions:
+舵机控制代码位于 `Servo Control/src/main.cpp`。它定义了以下表情和动作：
 
-*   **Expressions**:
-    *   `netural()`: Neutral expression
-    *   `happiness()`: Happy expression
-    *   `sadness()`: Sad expression
-    *   `surprise()`: Surprised expression
-*   **Actions**:
-    *   `blink()`: Blink action (will restore eyelids based on current expression state)
-    *   Speaking animation: Controlled in the `loop()` function via commands `0x21` (start speaking) and `0x22` (stop speaking) for the mouth servo (PCA2, Servo 14).
+*   **表情**:
+    *   `netural()`: 自然表情
+    *   `happiness()`: 开心表情
+    *   `sadness()`: 伤心表情
+    *   `surprise()`: 惊讶表情
+*   **动作**:
+    *   `blink()`: 眨眼动作 (会根据当前表情状态恢复眼皮)
+    *   说话动画: 在 `loop()` 函数中通过指令 `0x21` (开始说话) 和 `0x22` (结束说话) 控制嘴部舵机 (PCA2, Servo 14) 的开合。
 
-The server sends commands to Arduino via serial to trigger these expressions and actions. The command format is defined in `Server/server.py` and `Servo Control/src/main.cpp`:
+服务器通过串口向Arduino发送指令来触发这些表情和动作。指令格式在 `Server/server.py` 和 `Servo Control/src/main.cpp` 中定义：
 
-*   `0x02` + `x_angle` + `y_angle`: Control eyeball movement (currently not fully utilized for fine control in server code, set globally by expression functions).
-*   `0x10`: Neutral expression
-*   `0x11`: Happy expression
-*   `0x12`: Sad/Angry expression
-*   `0x13`: Scared/Surprised expression
-*   `0x21`: Start speaking animation
-*   `0x22`: Stop speaking animation
+*   `0x02` + `x_angle` + `y_angle`: 控制眼球运动 (当前服务器代码中未完全利用此精细控制，而是通过表情函数整体设置)。
+*   `0x10`: 自然表情
+*   `0x11`: 开心表情
+*   `0x12`: 伤心/愤怒表情
+*   `0x13`: 害怕/惊讶表情
+*   `0x21`: 开始说话动画
+*   `0x22`: 结束说话动画
 
-## Troubleshooting
+## 故障排除
 
-*   **ESP32 cannot connect to WiFi**: Check if WiFi credentials in `config.h` are correct and WiFi signal is good.
-*   **ESP32 cannot connect to server**:
-    *   Ensure server IP address is correctly configured in `config.h`.
-    *   Ensure Python main server (`server.py`) is running and listening on the correct IP and port.
-    *   Check firewall settings to allow ESP32 port communication.
-*   **`sensevoice.py` fails to start or load model**:
-    *   Ensure conda environment is activated.
-    *   Check if model path and `remote_code` path are correct.
-    *   Ensure all SenseVoice dependencies are installed, especially PyTorch and CUDA (if using GPU).
-*   **GPT-SoVITS API not working**:
-    *   Check if `go-api.bat` started successfully without errors.
-    *   Ensure model paths are configured correctly.
-*   **`server.py` cannot connect to SenseVoice or Arduino**:
-    *   Ensure `sensevoice.py` is running.
-    *   Ensure Arduino is connected to PC and the COM port in `config.json` is correct.
-    *   Check if drivers are correctly installed (especially serial port drivers on Windows).
-*   **No sound output/input**:
-    *   Check hardware connections of microphone and speaker.
-    *   Check I2S pin configuration.
-    *   Add serial debug messages in ESP32 code to see if audio data is being read and written correctly.
-*   **Servos not working or behaving erratically**:
-    *   Check if the external power supply for servos is sufficient and stable.
-    *   Check PCA9685 I2C address and connections.
-    *   Check servo connections to PCA9685.
-    *   Test individual servos to isolate problems.
-*   **LLM reply format error**:
-    *   The `system_prompt` in `server.py` has strict requirements for LLM output format. If LLM fails to adhere strictly, JSON parsing will fail. Try adjusting the prompt or adding stronger post-processing logic.
+*   **ESP32无法连接WiFi**: 检查 `config.h` 中的WiFi凭据是否正确，WiFi信号是否良好。
+*   **ESP32无法连接服务器**:
+    *   确保服务器IP地址在 `config.h` 中配置正确。
+    *   确保Python主服务器 (`server.py`) 已运行并在正确的IP和端口上监听。
+    *   检查防火墙设置，确保允许ESP32的端口通信。
+*   **`sensevoice.py` 无法启动或加载模型**:
+    *   确保conda环境已激活。
+    *   检查模型路径和 `remote_code` 路径是否正确。
+    *   确保已安装所有SenseVoice依赖，特别是PyTorch和CUDA（如果使用GPU）。
+*   **GPT-SoVITS API不工作**:
+    *   检查 `go-api.bat` 是否成功启动，并且没有错误。
+    *   确保模型路径配置正确。
+*   **`server.py` 无法连接SenseVoice或Arduino**:
+    *   确保 `sensevoice.py` 已运行。
+    *   确保Arduino已连接到PC，并且 `config.json` 中的COM端口正确。
+    *   检查驱动程序是否正确安装 (特别是Windows上的串口驱动)。
+*   **没有声音输出/输入**:
+    *   检查麦克风和扬声器的硬件连接。
+    *   检查I2S引脚配置。
+    *   在ESP32代码中增加串口调试信息，查看音频数据是否被正确读取和写入。
+*   **舵机不工作或行为异常**:
+    *   检查舵机的外部电源是否充足和稳定。
+    *   检查PCA9685的I2C地址和连接。
+    *   检查舵机与PCA9685的连接。
+    *   单个舵机测试，逐步排除问题。
+*   **LLM回复格式错误**:
+    *   `server.py` 中的 `system_prompt` 对LLM的输出格式有严格要求。如果LLM未能严格遵守，JSON解析会失败。可以尝试调整提示或增加更强的后处理逻辑。
 
-## TODO
+## 待办事项
 
-*   **Enhanced Emotional Expression**:
-    *   Implement more nuanced facial expressions beyond the basic set.
-    *   Dynamically adjust expression intensity based on LLM emotion scores.
-    *   Add subtle idle animations (e.g., occasional blinks, slight head movements).
-*   **Intelligent Voice Control**:
-    *   Implement a voice command system (supporting expression control, weather queries, etc.).
-    *   Develop IoT device integration interfaces (enabling voice control of lights, air conditioners, and other smart devices).
-    *   Integrate real-time information query capabilities (weather, news, schedule reminders, etc.).
-    *   Create a voice command shortcut library (supporting user-defined quick commands).
-*   **Improved Voice Interaction**:
-    *   Implement barge-in capability (allow user to interrupt the robot's speech).
-    *   Explore local ASR and TTS options to reduce latency and reliance on cloud services.
-    *   Add support for more languages in TTS if GPT-SoVITS allows.
-*   **Voice Perception Capabilities**:
-    *   Develop environmental sound recognition (e.g., doorbells, alarms, and other IoT device sounds).
-    *   Implement audio scene analysis-based environmental awareness.
-    *   Add customizable voice wake-word functionality.
-*   **Vision Capabilities**:
-    *   Integrate a camera for face detection/recognition.
-    *   Implement object recognition to allow interaction with the environment.
-    *   Use visual cues to understand user engagement or detect specific gestures.
-*   **Mobility**:
-    *   Add a mobile base to allow the robot to move.
-*   **User Customization**:
-    *   Allow users to easily define new voice commands or interaction flows.
-    *   Provide a simpler interface for customizing TTS voice or LLM personality.
-*   **System Robustness and Usability**:
-    *   Improve error handling and recovery mechanisms across all modules.
-    *   Develop a more user-friendly setup and configuration process.
-    *   Add more comprehensive logging for easier debugging.
-    *   Optimize power consumption, especially for battery-powered operation.
-*   **Advanced LLM Integration**:
-    *   Explore using LLMs for more complex task planning or reasoning.
-    *   Fine-tune an LLM specifically for this robot's persona and tasks.
-*   **Code and Documentation**:
-    *   Refactor code for better modularity and maintainability.
-    *   Add more detailed inline comments and expand documentation.
-    *   Create unit tests for server-side Python components.
-*   **Hardware Upgrades**:
-    *   Explore using more precise or quieter servos.
-    *   Investigate higher-quality microphone arrays for better sound capture.
-    *   Consider a more powerful main MCU if ESP32 limitations are reached.
-*   **Web Interface**:
-    *   Develop a web interface for configuration, status monitoring, and manual control.
+*   **增强情感表达**：
+    *   实现更细腻的面部表情，超越基础表情集合。
+    *   根据LLM情感评分动态调整表情强度。
+    *   添加细微的待机动画（如偶尔眨眼、轻微头部转动）。
 
-## Contribution Guidelines
+*   **智能语音控制**：
+    *   实现语音指令系统（支持表情控制、天气查询等功能）。
+    *   开发物联网设备联动接口（可通过语音控制灯光、空调等智能设备）。
+    *   集成实时信息查询能力（天气、新闻、日程提醒等）。
+    *   建立语音指令快捷方式库（支持用户自定义快捷指令）。
 
-Contributions to this project are welcome! Please follow these steps:
+*   **改进语音交互**：
+    *   实现语音打断功能（允许用户中断机器人说话）。
+    *   探索本地语音识别（ASR）和语音合成（TTS）方案以降低延迟，减少对云端服务的依赖。
+    *   如果GPT-SoVITS支持，增加更多语言的TTS支持。
 
-1.  Fork this repository.
-2.  Create a new branch (`git checkout -b feature/AmazingFeature`).
-3.  Commit your changes (`git commit -m 'Add some AmazingFeature'`).
-4.  Push your branch to remote (`git push origin feature/AmazingFeature`).
-5.  Open a Pull Request.
+*   **语音感知功能**：
+    *   开发环境声音识别能力（如门铃、警报等物联网设备声音）。
+    *   实现基于音频场景分析的环境感知功能。
+    *   添加语音唤醒词自定义功能。
 
-## Acknowledgements
+*   **视觉能力**：
+    *   集成摄像头实现人脸检测/识别功能。
+    *   实现物体识别能力，支持与环境互动。
+    *   利用视觉线索理解用户参与度或识别特定手势。
 
-*   **FunASR/SenseVoice Team**: For providing excellent speech recognition models.
-*   **GPT-SoVITS Community**: For providing powerful speech synthesis tools.
-*   **DeepSeek AI**: For providing language model API.
-*   **Adafruit**: For providing driver libraries for PCA9685, NeoPixel, etc.
-*   **U8g2 Library Author**: For providing a powerful OLED display library.
-*   All related open-source projects and communities.
+*   **移动能力**：
+    *   增加移动底盘，使机器人具备行走能力。
 
+*   **用户自定义**：
+    *   允许用户轻松定义新的语音指令或交互流程。
+    *   提供更简单的界面用于定制TTS声音或LLM性格。
+
+*   **系统健壮性与易用性**：
+    *   改进各模块的错误处理与恢复机制。
+    *   开发更友好的安装配置流程。
+    *   添加更全面的日志系统便于调试。
+    *   优化功耗表现，特别是电池供电场景。
+
+*   **高级LLM集成**：
+    *   探索使用LLM进行更复杂的任务规划与推理。
+    *   针对机器人角色和任务微调专属LLM模型。
+
+*   **代码与文档**：
+    *   重构代码提升模块化与可维护性。
+    *   增加详细的代码注释并扩展文档。
+    *   为服务端Python组件创建单元测试。
+
+*   **硬件升级**：
+    *   探索使用精度更高或更静音的舵机。
+    *   研究更高质量的麦克风阵列以提升拾音效果。
+    *   若ESP32性能不足，考虑升级主控MCU。
+
+*   **网页界面**：
+    *   开发用于配置、状态监控和手动控制的网页界面。
+
+## 贡献指南
+
+欢迎对此项目做出贡献！请遵循以下步骤：
+
+1.  Fork本仓库。
+2.  创建一个新的分支 (`git checkout -b feature/AmazingFeature`)。
+3.  提交您的更改 (`git commit -m 'Add some AmazingFeature'`)。
+4.  将您的分支推送到远程 (`git push origin feature/AmazingFeature`)。
+5.  开启一个Pull Request。
+
+## 致谢
+
+*   **FunASR/SenseVoice团队**: 提供优秀的语音识别模型。
+*   **GPT-SoVITS社区**: 提供强大的语音合成工具。
+*   **DeepSeek AI**: 提供语言模型API。
+*   **Adafruit**: 提供PCA9685和NeoPixel等硬件的驱动库。
+*   **U8g2库作者**: 提供强大的OLED显示库。
+*   所有相关的开源项目和社区。
 
 ---
 
-**Disclaimer**: This project uses third-party APIs and services. Please comply with the terms of use of each service provider. Keep sensitive information such as API keys secure and do not commit them directly to public code repositories.
+**免责声明**: 本项目使用了第三方API和服务。请遵守各服务提供商的使用条款。API密钥等敏感信息请妥善保管，不要直接提交到公共代码库中。
