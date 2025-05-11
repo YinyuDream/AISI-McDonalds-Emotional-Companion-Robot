@@ -1,4 +1,4 @@
-([简体中文](./README_zh.md)|English)
+([简体中文](./README.md)|English)
 # AISI McDonald’s Emotional Companion Robot
 
 ![photo](photo.png)
