@@ -1,5 +1,5 @@
 「简体中文」|「[English](./README_en.md)」
-# 爱思麦当劳情感伴侣机器人
+# 基于AI和MCU的智能语音交互表情机器人
 
 ![photo](photo.png)
 

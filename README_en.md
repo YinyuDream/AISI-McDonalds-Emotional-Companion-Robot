@@ -1,5 +1,5 @@
 ([简体中文](./README.md)|English)
-# AISI McDonald’s Emotional Companion Robot
+# AI and MCU Based Smart Voice Interactive Expression Robot
 
 ![photo](photo.png)
 
